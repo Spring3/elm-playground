@@ -1,4 +1,4 @@
-import Html exposing (beginnerProgram, div, input, text)
+import Html exposing (div, input, text)
 import Html.Attributes exposing (placeholder, type_)
 import Html.Events exposing (onInput, onClick)
 import List
@@ -59,7 +59,7 @@ model : Model
 model = Model 0 [] 0
 
 type Msg = ValueChange String | Start
-update : Msg -> Model -> Model
+update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     ValueChange newVal ->
@@ -69,7 +69,7 @@ update msg model =
         result = fib(model.fibNum model)
       }
 
-view : Model -> Html.Html Msg
+view : Model -> Html Msg
 view model =
   div []
       [
@@ -78,11 +78,22 @@ view model =
         input [ type_ "Submit", onClick Start ] []
       ]
 
+subscriptions : Model -> Sub Msg
+subscriptions model =
+
+
+init : (Model, Cmd Msg)
+init =
+
+
+
 main =
   Html.beginnerProgram
   {
+    init = ( model, Cmd.none ),
     model = model,
     update = update,
-    view = view
+    view = view,
+    subscriptions = subscriptions
   }
   
