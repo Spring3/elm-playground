@@ -3,29 +3,25 @@ import Html.Attributes exposing (type_, placeholder)
 import Html.Events exposing (onInput, onClick)
 import Fibonacci
 
-type alias Model = {
-  cache: List (Int, Int),
+type alias Model = {  
   target: Int,
   result: Int
 }
 
-type Msg = TargetChange String | Start | Result Int
+type Msg = TargetChange String | Start
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     Start ->
-      (Model model.cache model.target (Fibonacci.fib model.target), Cmd.none)
+      (Model model.target (Fibonacci.fib model.target), Cmd.none)
 
     TargetChange target ->
-      (Model model.cache (Fibonacci.toInt target) 0, Cmd.none)
-
-    Result result ->
-      (model, Cmd.none)
+      (Model (Fibonacci.strToInt target) 0, Cmd.none)
 
 init : (Model, Cmd Msg)
 init =
-  (Model [] 0 0, Cmd.none)
+  (Model 0 0, Cmd.none)
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
