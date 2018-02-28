@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Elm</title>
+  <script type="text/javascript" src="elm.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <img id="img" width="600" height="500" src=""></img>
+</body>
+
+<script type="text/javascript">
+  const app = Elm.Main.embed(document.getElementById("root"));
+  const img = document.getElementById('img');
+  const handler = (msg) => {
+    console.log(`Received on front-end ${msg}`);
+    fetch(`https://api.qwant.com/api/search/images?count=1&q=${msg}`, {
+      method: 'GET'
+    })
+    .then(response => response.json())
+    .then(json => {
+      console.log(json);
+      app.ports.newState.send(json.data.result.items[0].title);
+      console.log(json.data.result.items[0].media)
+      img.src = json.data.result.items[0].media;
+    });
+  }
+
+  app.ports.onStateChange.subscribe(handler)
+</script>
+</html>
